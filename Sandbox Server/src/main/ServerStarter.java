@@ -3,6 +3,9 @@ package main;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
 import com.jmr.wrapper.common.Connection;
 import com.jmr.wrapper.common.listener.SocketListener;
 import com.jmr.wrapper.server.Server;
@@ -13,6 +16,10 @@ import packets.MapPacket;
 import packets.PlayerPacket;
 
 public class ServerStarter implements SocketListener {
+	
+	//Server UI
+	static JFrame frame;
+	static JPanel content;
 	
 	int nextID;
 	
@@ -28,7 +35,7 @@ public class ServerStarter implements SocketListener {
 		map = new main.Map(32, 16);
 		
 		try{
-			Server server = new Server(2667, 2667);
+			Server server = new Server(6756, 6756);
 			server.setListener((SocketListener) this);
 			
 			if(server.isConnected()){
@@ -41,7 +48,16 @@ public class ServerStarter implements SocketListener {
 	}
 	
 	public static void main(String[] args){
+		startUI();
 		new ServerStarter();
+	}
+	
+	public static void startUI(){
+		
+		frame = new JFrame();
+		frame.setBounds(0, 0, 800, 600);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
 	}
 
 	//Called when a client is connected
