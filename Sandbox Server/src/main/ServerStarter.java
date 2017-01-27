@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextPane;
 
 import com.jmr.wrapper.common.Connection;
 import com.jmr.wrapper.common.listener.SocketListener;
@@ -20,6 +21,7 @@ public class ServerStarter implements SocketListener {
 	//Server UI
 	static JFrame frame;
 	static JPanel content;
+	static JTextPane log;
 	
 	int nextID;
 	
@@ -52,24 +54,37 @@ public class ServerStarter implements SocketListener {
 		new ServerStarter();
 	}
 	
+	public static void log(String text){
+		log.setText(log.getText() + "\n" + text);
+	}
+	
 	public static void startUI(){
+		
+		log = new JTextPane();
+		log.setBounds(0, 0, 800, 600);
+		log.setEditable(false);
+		
+		content = new JPanel();
+		content.setLayout(null);
+		content.add(log);
 		
 		frame = new JFrame();
 		frame.setBounds(0, 0, 800, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setContentPane(content);
 		frame.setVisible(true);
 	}
 
 	//Called when a client is connected
 	@Override
 	public void connected(Connection con) {
-		System.out.println("Client connected...");
+		log("Client connected");
 	}
 	
 	//Called when a client disconnects
 	@Override
 	public void disconnected(Connection con) {
-		System.out.println("Client disconnected...");
+		log("Client disconnected...");
 		
 		//Notifies all other clients that one has disconnected
 		for(int i = 0; i < connections.size(); i++){
@@ -87,7 +102,7 @@ public class ServerStarter implements SocketListener {
 	public void received(Connection con, Object obj) {
 		
 		if(obj instanceof PlayerPacket){
-			
+			log("Received player packet.");
 			PlayerPacket pp = (PlayerPacket)obj; //Hahaha... pee pee
 			if(pp.id == -1){ //This happens when the player first connects
 				
