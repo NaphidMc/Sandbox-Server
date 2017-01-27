@@ -102,7 +102,7 @@ public class ServerStarter implements SocketListener {
 	public void received(Connection con, Object obj) {
 		
 		if(obj instanceof PlayerPacket){
-			log("Received player packet.");
+			
 			PlayerPacket pp = (PlayerPacket)obj; //Hahaha... pee pee
 			if(pp.id == -1){ //This happens when the player first connects
 				
@@ -119,7 +119,7 @@ public class ServerStarter implements SocketListener {
 					i += length;
 				}
 				
-				//Sends all the other players
+				//Sends all the other players to the player
 				for(int i = 0; i < ids.size(); i++){
 					con.sendTcp(recentPlayerPackets.get(ids.get(i)));
 				}
